@@ -180,8 +180,12 @@ SessionController::SessionController(Session *sessionParam, TerminalDisplay *vie
     connect(session(), &Konsole::Session::resizeRequest, this, &Konsole::SessionController::sessionResizeRequest);
 
     // listen for popup menu requests
-    connect(view(), &Konsole::TerminalDisplay::configureRequest, this, &Konsole::SessionController::showDisplayContextMenu);
-
+    // connect(view(), &Konsole::TerminalDisplay::configureRequest, this, &Konsole::SessionController::showDisplayContextMenu);
+    connect(view(), &Konsole::TerminalDisplay::configureRequest,
+        [this](const QPoint&) {
+            qCDebug(KonsoleDebug) << "ignore rigth click context\n";
+            paste();  
+        });
     // move view to newest output when keystrokes occur
     connect(view(), &Konsole::TerminalDisplay::keyPressedSignal, this, &Konsole::SessionController::trackOutput);
 
